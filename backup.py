@@ -26,7 +26,15 @@ if not os.path.exists(target_dir):
 today = target_dir + os.sep + time.strftime('%Y%m%d')
 now = time.strftime('%H%M%S')
 
-target = today + os.sep + now + '.zip'
+#添加一条来自用户的注释以创建zip文件的name
+comment = input('Enter a comment >> ')
+if len(comment) == 0:
+	target = today + os.sep + now +'.zip'
+else:
+	target = today + os.sep + now + '_' + \
+		comment.replace(' ','_') + '.zip'
+
+#target = today + os.sep + now + '.zip'
 #target = target_dir + os.sep + time.strftime('%Y%m%s%H%M%S') + '.zip'
 
 #如果子目录尚不存在，则创建一个
