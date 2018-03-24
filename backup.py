@@ -17,13 +17,22 @@ source = ['/Users/night/manito_code']
 # 2.备份的文件必须放在一个主备份目录中
 target_dir = '/Users/night/manito_code/backup'
 
-# 3.备份文件打包成zip文件
-# 4.zip压缩文件命名由当前时间和时间构成
-target = target_dir + os.sep + time.strftime('%Y%m%s%H%M%S') + '.zip'
-
 # 如果目标目录不存在，则创建
 if not os.path.exists(target_dir):
 	os.mkdir(target_dir)
+
+# 3.备份文件打包成zip文件
+# 4.将当前日期作为主备份目录下的子目录名称
+today = target_dir + os.sep + time.strftime('%Y%m%d')
+now = time.strftime('%H%M%S')
+
+target = today + os.sep + now + '.zip'
+#target = target_dir + os.sep + time.strftime('%Y%m%s%H%M%S') + '.zip'
+
+#如果子目录尚不存在，则创建一个
+if not os.path.exists(today):
+	os.mkdir(today)
+	print('Successful created directory',today)
 
 # 5.使用zip命令将文件打包成zip形式
 zip_command = 'zip -r {0} {1}'.format(target,' '.join(source))
