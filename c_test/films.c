@@ -2,51 +2,69 @@
 程序内容：用户输入一年内看过的电影，\
 	储存电影的各种信息：片名、导演、评级等
 版本： 20180427_0.1.0  wangwg
+	  20180427_0.1.1  wangwg
 */
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #define TSIZE 45 /* 存储片名的数组大小 */
-#define FMAX 5 /* 影片的最大数量 */
-
 
 struct film {
 	char title[TSIZE];
 	int rating;
+	struct film *next;
 };
 
 char * s_gets(char str[], int lim);
 
 int main(void)
 {
-	struct film movies[FMAX];
-	int i = 0;
-	int j;
+	struct film *head = NULL;
+	struct film *current;
+	struct film *prev;
+	char input[TSIZE];
 
 	puts("Enter first movie title:");
-	while(i < FMAX && s_gets(movies[i].title, TSIZE) != NULL &&
-		movies[i].title[0] != '\0')
+	while(s_gets(input, TSIZE) != NULL && input[0] != '\0')
 	{
+		current = (struct film *) malloc(sizeof(struct film));
+
+		if (head == NULL)
+			head = current;
+		else
+			prev->next = current;
+		current->next = NULL;
+		strcpy(current->title, input);
+
 		puts("Enter your rating:");
-		scanf("%d", &movies[i++].rating); //等同于 scanf("%d", &movies[i].rating); i++;
+		scanf("%d", &current->rating); //等同于 scanf("%d", &movies[i].rating); i++;
 		while(getchar() != '\n')
 			continue;
 		puts("Enter next movie title (empty line to stop):");
+		prev = current;
 	}
 
-	if (i == 0)
-	{
+	if (head == NULL)
 		printf("No data entered.\n");
-	}
 	else
-	{
 		printf("Here is the movie list:\n");
+	current = head;
+	while(current != NULL)
+	{
+		printf("Movie: %s Rating: %d \n", current->title, current->rating);
+		current = current->next;
 	}
 
-	for (int j = 0; j < i; j++)
-		printf("Movie: %s Rating: %d \n", movies[j].title, movies[j].rating);
-	printf("Bye");
+	//从头开始，释放已分配的内存
+	current = head;
+	while(current != NULL)
+	{
+		free(current);
+		current = current->next;
+	}
+	printf("Bye.\n");
 
 	return 0;
 }
@@ -68,7 +86,7 @@ char * s_gets(char *st, int n)
 			*find = '\0';
 		else
 			while (getchar() != '\n')
-				continue;
+				continue;    //处理空行
 	}
 
 	return ret_val;
